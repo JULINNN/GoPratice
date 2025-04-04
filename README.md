@@ -10,6 +10,15 @@ Go REST API 產品管理系統，使用Gin框架與PostgreSQL資料庫。
 - 配置管理
 - 單元與整合測試
 
+## 依賴
+
+- Gin框架
+- PostgreSQL
+- sqlx
+- Zap + lumberjack
+- testify、sqlmock、dockertest
+- Docker & Docker Compose
+
 ## 目錄結構
 
 ```
@@ -32,16 +41,16 @@ Go REST API 產品管理系統，使用Gin框架與PostgreSQL資料庫。
 
 ## API端點
 
-| 方法    | 端點                | 描述           |
-|--------|---------------------|---------------|
-| GET    | /health             | 健康檢查       |
-| GET    | /api/v1/products    | 獲取所有產品    |
-| GET    | /api/v1/products/:id | 獲取單個產品   |
-| POST   | /api/v1/products    | 創建產品       |
-| PUT    | /api/v1/products/:id | 更新產品       |
-| DELETE | /api/v1/products/:id | 刪除產品       |
+| 方法    | 端點                | 描述           | 狀態碼 |
+|--------|---------------------|---------------|--------|
+| GET    | /health             | 健康檢查       | 200 OK |
+| GET    | /api/v1/products    | 獲取所有產品    | 200 OK |
+| GET    | /api/v1/products/:id | 獲取單個產品   | 200 OK / 404 Not Found |
+| POST   | /api/v1/products    | 創建產品       | 201 Created / 400 Bad Request |
+| PUT    | /api/v1/products/:id | 更新產品       | 200 OK / 404 Not Found |
+| DELETE | /api/v1/products/:id | 刪除產品       | 200 OK / 404 Not Found |
 
-## 產品模型
+## 產品PoJo
 
 ```json
 {
@@ -52,6 +61,16 @@ Go REST API 產品管理系統，使用Gin框架與PostgreSQL資料庫。
   "expiration": "2025-12-31",
   "create_at": "2024-04-04 12:34:56",
   "update_at": "2024-04-04 12:34:56"
+}
+```
+
+## 錯誤回應格式
+
+```json
+{
+  "error_code": "PRODUCT_NOT_FOUND",
+  "error_message": "產品未找到",
+  "request_id": "a4b3c2-d1e0-f1g2-h3i4"
 }
 ```
 
@@ -75,7 +94,19 @@ docker-compose up -d
 ```
 
 - 應用: http://localhost:8080
-- PgAdmin: http://localhost:5050 (admin@example.com / admin)
+
+## 測試
+
+```bash
+# 所有測試
+go test ./tests/...
+
+# 整合測試
+go test ./tests/... -tags=integration
+
+# API測試
+./test-api.sh
+```
 
 ## 環境變數
 
@@ -89,14 +120,3 @@ docker-compose up -d
 | DB_PASSWORD | 資料庫密碼    | postgres         |
 | DB_NAME     | 資料庫名稱    | product_db       |
 | LOG_LEVEL   | 日誌級別      | info             |
-
-## 測試
-
-```bash
-# 所有測試
-go test ./tests/...
-
-# 整合測試
-go test ./tests/... -tags=integration
-
-```
