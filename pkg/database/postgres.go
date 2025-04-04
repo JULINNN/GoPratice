@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 // NewPostgresDB 創建 PostgreSQL 資料庫連接，包含重試邏輯
