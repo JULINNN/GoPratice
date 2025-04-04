@@ -1,0 +1,25 @@
+{
+    "server": {
+      "port": 8080,
+      "mode": "release"
+    },
+    "database": {
+      "host": "localhost",
+      "port": 5432,
+      "user": "postgres",
+      "password": "postgres",
+      "dbname": "product_db",
+      "sslmode": "disable"
+    },
+    "logger": {
+      "level": "info",
+      "format": "json",
+      "output_paths": "stdout,./logs/app.log",
+      "error_outputs": "stderr,./logs/error.log",
+      "enable_rotate": true,
+      "max_size": 10,
+      "max_backups": 5,
+      "max_age": 30,
+      "compress": true
+    }
+  }
